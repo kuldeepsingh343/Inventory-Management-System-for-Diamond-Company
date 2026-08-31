@@ -1,6 +1,11 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inventory Management System for Diamond Company
 
-## Getting Started
+This project was completely built and deployed using **Antigravity IDE** and its AI Agent. 
+
+## Screenshots
+![Login Page](./public/docs/login.png)
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 First, run the development server:
 
