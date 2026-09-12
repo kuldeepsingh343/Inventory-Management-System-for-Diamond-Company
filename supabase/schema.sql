@@ -498,3 +498,38 @@ CREATE SEQUENCE pr_number_seq START 5001;
 CREATE SEQUENCE sr_number_seq START 6001;
 CREATE SEQUENCE dn_number_seq START 7001;
 CREATE SEQUENCE cn_number_seq START 8001;
+
+-- ============================================================
+-- RPC FUNCTIONS (called by the application)
+-- ============================================================
+
+-- Wrapper to call nextval from Supabase client
+CREATE OR REPLACE FUNCTION public.nextval(seq_name TEXT)
+RETURNS BIGINT AS $$
+BEGIN
+  RETURN nextval(seq_name);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Decrement stock when a sales order is created
+CREATE OR REPLACE FUNCTION public.decrement_stock(p_id UUID, p_qty DECIMAL, p_pcs INTEGER)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE products
+  SET pcs = pcs - p_pcs,
+      qty = qty - p_qty
+  WHERE id = p_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Increment returned quantities on purchase order items
+CREATE OR REPLACE FUNCTION public.increment_po_item_returns(p_item_id UUID, p_qty DECIMAL, p_pcs INTEGER)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE purchase_order_items
+  SET returned_qty = returned_qty + p_qty,
+      returned_pcs = returned_pcs + p_pcs
+  WHERE id = p_item_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+

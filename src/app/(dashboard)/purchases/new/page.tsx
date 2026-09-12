@@ -31,10 +31,10 @@ export default function NewPurchasePage() {
     <PermissionGuard module="purchases" action="create" fallback={<div>You don't have permission to create purchases.</div>}>
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/purchases">
+          <Button variant="ghost" size="icon" render={<Link href="/purchases" />}>
+             
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+             
           </Button>
           <h1 className="text-3xl font-bold tracking-tight">New Purchase Memo</h1>
         </div>

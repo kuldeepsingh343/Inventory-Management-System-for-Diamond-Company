@@ -111,10 +111,10 @@ export default function PurchaseReturnPage() {
     <PermissionGuard module="purchases" action="update" fallback={<div>You don't have permission to return purchases.</div>}>
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href={`/purchases/${id}`}>
+          <Button variant="ghost" size="icon" render={<Link href={`/purchases/${id}`} />}>
+             
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+             
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Return Items</h1>

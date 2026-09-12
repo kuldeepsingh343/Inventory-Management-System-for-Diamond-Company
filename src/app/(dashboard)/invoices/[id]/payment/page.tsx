@@ -86,10 +86,10 @@ export default function RecordPaymentPage() {
     <PermissionGuard module="sales" action="update" fallback={<div>You don't have permission to record payments.</div>}>
       <div className="max-w-2xl mx-auto space-y-6">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href={`/invoices/${id}`}>
+          <Button variant="ghost" size="icon" render={<Link href={`/invoices/${id}`} />}>
+             
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+             
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Record Payment</h1>
@@ -177,8 +177,8 @@ export default function RecordPaymentPage() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t">
-                <Button type="button" variant="outline" asChild>
-                  <Link href={`/invoices/${id}`}>Cancel</Link>
+                <Button type="button" variant="outline" render={<Link href={`/invoices/${id}`} />}>
+                   Cancel 
                 </Button>
                 <Button type="submit" disabled={submitting}>
                   {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

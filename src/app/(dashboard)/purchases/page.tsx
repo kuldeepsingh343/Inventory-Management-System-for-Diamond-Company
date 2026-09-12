@@ -51,11 +51,11 @@ export default function PurchasesPage() {
         <div className="flex items-center gap-2">
           <ExportButton data={filteredOrders} filename="purchases" />
           {canCreate && (
-            <Button asChild>
-              <Link href="/purchases/new">
+            <Button render={<Link href="/purchases/new" />}>
+               
                 <Plus className="w-4 h-4 mr-2" />
                 New Purchase
-              </Link>
+               
             </Button>
           )}
         </div>

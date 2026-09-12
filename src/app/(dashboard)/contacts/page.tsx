@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getContacts, addContact } from "@/lib/actions/contacts";
 import type { Contact, ContactFormData } from "@/lib/types/database";
 import { Input } from "@/components/ui/input";
@@ -35,20 +35,20 @@ export default function ContactsPage() {
   const { can } = usePermissions();
   const canCreate = can("contacts", "create");
 
+  const loadContacts = useCallback(async () => {
+    setLoading(true);
+    const { data } = await getContacts(search, typeFilter);
+    if (data) setContacts(data);
+    setLoading(false);
+  }, [search, typeFilter]);
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       loadContacts();
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [search, typeFilter]);
-
-  async function loadContacts() {
-    setLoading(true);
-    const { data } = await getContacts(search, typeFilter);
-    if (data) setContacts(data);
-    setLoading(false);
-  }
+  }, [loadContacts]);
 
   const handleAddSubmit = async (formData: ContactFormData) => {
     setIsSubmitting(true);

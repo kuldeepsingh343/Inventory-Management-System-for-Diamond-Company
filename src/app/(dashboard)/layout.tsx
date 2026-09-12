@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Sidebar } from "@/components/sidebar";
 import { Topbar } from "@/components/topbar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 import type { Profile } from "@/lib/types/database";
 
@@ -49,13 +50,14 @@ export default function DashboardLayout({
         />
         <div
           className={cn(
-            "transition-sidebar min-h-screen",
+            "min-h-screen transition-all duration-300",
             collapsed ? "ml-[68px]" : "ml-[240px]"
           )}
         >
           <Topbar profile={profile} />
           <main className="p-6">{children}</main>
         </div>
+        <Toaster />
       </div>
     </TooltipProvider>
   );

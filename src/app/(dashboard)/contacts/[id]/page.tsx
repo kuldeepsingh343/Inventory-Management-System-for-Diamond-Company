@@ -89,10 +89,10 @@ export default function ContactDetailPage() {
     <div className="space-y-6 max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/contacts">
+          <Button variant="ghost" size="icon" render={<Link href="/contacts" />}>
+             
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+             
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{contact.name}</h1>

@@ -23,7 +23,7 @@ const MODULES = [
   { id: "contacts", label: "Contacts (Customers/Vendors)" },
   { id: "purchases", label: "Purchases" },
   { id: "sales", label: "Sales & Invoicing" },
-  { id: "reports", label: "Reports" },
+  { id: "settings", label: "Settings" },
 ];
 
 export default function SettingsPage() {
@@ -188,7 +188,7 @@ export default function SettingsPage() {
                     <div className="flex items-center space-x-2">
                       <Switch 
                         id={`${mod.id}-read`} 
-                        checked={currentPerms[mod.id]?.read !== false} // Default true
+                        checked={currentPerms[mod.id]?.read ?? false} // Default false if uninitialized
                         onCheckedChange={(c) => handleToggle(mod.id, 'read', c)}
                       />
                       <Label htmlFor={`${mod.id}-read`} className="text-sm">View (Read)</Label>
@@ -197,7 +197,7 @@ export default function SettingsPage() {
                     <div className="flex items-center space-x-2">
                       <Switch 
                         id={`${mod.id}-create`} 
-                        checked={currentPerms[mod.id]?.create !== false} // Default true
+                        checked={currentPerms[mod.id]?.create ?? false}
                         onCheckedChange={(c) => handleToggle(mod.id, 'create', c)}
                       />
                       <Label htmlFor={`${mod.id}-create`} className="text-sm">Create</Label>
@@ -206,7 +206,7 @@ export default function SettingsPage() {
                     <div className="flex items-center space-x-2">
                       <Switch 
                         id={`${mod.id}-update`} 
-                        checked={currentPerms[mod.id]?.update !== false} // Default true
+                        checked={currentPerms[mod.id]?.update ?? false}
                         onCheckedChange={(c) => handleToggle(mod.id, 'update', c)}
                       />
                       <Label htmlFor={`${mod.id}-update`} className="text-sm">Edit (Update)</Label>

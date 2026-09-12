@@ -1,41 +1,91 @@
-# Inventory Management System for Diamond Company
+# 💎 Inventory Management System for Diamond Company
 
-This project was completely built and deployed using **Antigravity IDE** and its AI Agent. 
+> **This entire project was built and deployed using [Antigravity IDE](https://antigravity.dev) and its AI Agent — from code generation, bug fixing, database schema design, to production deployment on Vercel.**
+
+🔗 **Live Demo**: [https://inventory-management-system-for-dia.vercel.app](https://inventory-management-system-for-dia.vercel.app)
 
 ## Screenshots
+
+### Login Page
 ![Login Page](./public/docs/login.png)
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## ✨ Features
 
-First, run the development server:
+- **📦 Stock Management** — Add, upload (Excel/CSV bulk import), search, filter by category, and adjust diamond inventory
+- **🛒 Purchase Orders** — Create purchase memos, convert to bills, process returns with debit notes
+- **💰 Sales Orders** — Create sales memos, convert to invoices, track returns with credit notes
+- **🧾 Invoicing & Payments** — Generate invoices from sales, record payments (cash, bank, Zelle), auto-balance tracking
+- **👥 Contact Management** — Manage vendors, customers, and dual-type contacts with full transaction history
+- **🔐 Role-Based Access Control** — Admin and user roles with granular module-level permissions (CRUD per module)
+- **📊 Dashboard** — Monthly sales overview, receivables, payables, and recent transaction feed
+- **📤 Export** — Export any data table to Excel with one click
+- **🔒 Security** — Supabase Row Level Security (RLS) on every table, admin-only delete operations
 
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 16, React 19, TypeScript |
+| **Styling** | Tailwind CSS 4, Base UI (shadcn components) |
+| **Backend** | Supabase (PostgreSQL + Auth + RLS) |
+| **Deployment** | Vercel |
+| **IDE** | Antigravity IDE with AI Agent |
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20+
+- A Supabase project ([supabase.com](https://supabase.com))
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/kuldeepsingh343/Inventory-Management-System-for-Diamond-Company.git
+cd Inventory-Management-System-for-Diamond-Company
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Set up Supabase
+1. Create a new project at [supabase.com](https://supabase.com)
+2. Go to **SQL Editor** and run the contents of `supabase/schema.sql`
+3. Go to **Authentication → Users** and create your first admin user
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configure environment
+Create a `.env.local` file:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Run locally
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/
+│   ├── (dashboard)/          # Protected dashboard pages
+│   │   ├── stock/            # Stock management, upload, adjust
+│   │   ├── purchases/        # Purchase orders, returns
+│   │   ├── sales/            # Sales orders
+│   │   ├── invoices/         # Invoicing & payments
+│   │   ├── contacts/         # Contact management
+│   │   └── settings/         # Admin user/permissions management
+│   └── login/                # Authentication page
+├── components/               # Reusable UI components
+├── lib/
+│   ├── actions/              # Server actions (CRUD operations)
+│   ├── supabase/             # Supabase client/server/middleware
+│   ├── hooks/                # Custom React hooks
+│   └── types/                # TypeScript type definitions
+└── proxy.ts                  # Next.js 16 proxy (auth middleware)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👨‍💻 Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Made with ❤️ by Kuldeep Singh**
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built entirely using **Antigravity IDE** and its AI-powered coding agent.

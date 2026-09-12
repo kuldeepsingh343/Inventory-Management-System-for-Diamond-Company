@@ -44,10 +44,10 @@ export default function InvoiceDetailPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/invoices">
+          <Button variant="ghost" size="icon" render={<Link href="/invoices" />}>
+             
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+             
           </Button>
           <div>
             <div className="flex items-center gap-3">
@@ -62,11 +62,11 @@ export default function InvoiceDetailPage() {
 
         <div className="flex items-center gap-2">
           {canUpdate && invoice.balance > 0 && invoice.status !== 'cancelled' && (
-            <Button asChild>
-              <Link href={`/invoices/${id}/payment`}>
+            <Button render={<Link href={`/invoices/${id}/payment`} />}>
+               
                 <DollarSign className="w-4 h-4 mr-2" />
                 Record Payment
-              </Link>
+               
             </Button>
           )}
         </div>

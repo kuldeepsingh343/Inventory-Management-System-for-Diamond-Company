@@ -63,10 +63,10 @@ export default function PurchaseDetailPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/purchases">
+          <Button variant="ghost" size="icon" render={<Link href="/purchases" />}>
+             
               <ArrowLeft className="w-5 h-5" />
-            </Link>
+             
           </Button>
           <div>
             <div className="flex items-center gap-3">
@@ -92,11 +92,11 @@ export default function PurchaseDetailPage() {
           )}
           
           {canUpdate && (po.status === 'active' || po.status === 'partially_returned' || po.status === 'billed') && (
-            <Button variant="outline" asChild>
-              <Link href={`/purchases/${id}/return`}>
+            <Button variant="outline" render={<Link href={`/purchases/${id}/return`} />}>
+               
                 <Undo2 className="w-4 h-4 mr-2" />
                 Return Items
-              </Link>
+               
             </Button>
           )}
         </div>
