@@ -323,10 +323,55 @@ export async function addPayment(formData: PaymentFormData) {
       .eq("id", formData.invoice_id);
       
     revalidatePath("/invoices");
+    revalidatePath("/payments");
     revalidatePath(`/invoices/${formData.invoice_id}`);
     return { data: payment, error: null };
   } catch (error: any) {
     console.error("Add payment error:", error);
+    return { data: null, error: error.message };
+  }
+}
+
+export async function getSalesReturns() {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("sales_returns")
+      .select("*, sales_order:sales_orders(id, order_no, customer:contacts(name, company_name))")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      return { data: data as any[], error: null };
+    }
+
+    const { data: orders, error: orderError } = await supabase
+      .from("sales_orders")
+      .select("*, customer:contacts(name, company_name)")
+      .in("status", ["returned", "partially_returned"])
+      .order("created_at", { ascending: false });
+
+    if (orderError) throw orderError;
+    return { data: (orders || []) as any[], error: null, fromOrders: true };
+  } catch (error: any) {
+    console.error("Fetch sales returns error:", error);
+    return { data: null, error: error.message };
+  }
+}
+
+export async function getPayments() {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("payments")
+      .select("*, customer:contacts(name, company_name), invoice:invoices(id, invoice_no)")
+      .order("payment_date", { ascending: false });
+
+    if (error) throw error;
+    return { data: data as any[], error: null };
+  } catch (error: any) {
+    console.error("Fetch payments error:", error);
     return { data: null, error: error.message };
   }
 }

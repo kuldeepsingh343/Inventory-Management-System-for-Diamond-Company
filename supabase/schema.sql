@@ -10,7 +10,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- ENUM TYPES
 -- ============================================================
 
-CREATE TYPE user_role AS ENUM ('admin', 'user');
+CREATE TYPE user_role AS ENUM ('admin', 'super_admin', 'user');
 CREATE TYPE contact_type AS ENUM ('customer', 'vendor', 'customer_vendor', 'contact');
 CREATE TYPE order_status AS ENUM ('draft', 'active', 'billed', 'partially_returned', 'returned', 'cancelled');
 CREATE TYPE invoice_status AS ENUM ('open', 'paid', 'partially_paid', 'cancelled');
@@ -383,11 +383,19 @@ ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE credit_notes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE stock_adjustments ENABLE ROW LEVEL SECURITY;
 
--- Helper function: check if user is admin
+-- Helper function: check if user is admin (admin or super_admin)
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN AS $$
   SELECT EXISTS (
-    SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'
+    SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
+  );
+$$ LANGUAGE sql SECURITY DEFINER;
+
+-- Helper function: check if user is super_admin
+CREATE OR REPLACE FUNCTION public.is_super_admin()
+RETURNS BOOLEAN AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'super_admin'
   );
 $$ LANGUAGE sql SECURITY DEFINER;
 
@@ -395,20 +403,25 @@ $$ LANGUAGE sql SECURITY DEFINER;
 -- PROFILES RLS
 -- ============================================================
 
+-- View own profile or admin/super_admin can see all
 CREATE POLICY "Users can view own profile"
-  ON profiles FOR SELECT USING (id = auth.uid());
+  ON profiles FOR SELECT USING (id = auth.uid() OR is_admin());
 
-CREATE POLICY "Admins can view all profiles"
-  ON profiles FOR SELECT USING (is_admin());
-
+-- Update: own info, OR super_admin updates anyone, OR admin updates user-role only
 CREATE POLICY "Users can update own profile"
-  ON profiles FOR UPDATE USING (id = auth.uid());
+  ON profiles FOR UPDATE USING (
+    id = auth.uid()
+    OR is_super_admin()
+    OR (is_admin() AND (SELECT role FROM profiles p2 WHERE p2.id = profiles.id) = 'user')
+  );
 
-CREATE POLICY "Admins can update all profiles"
-  ON profiles FOR UPDATE USING (is_admin());
-
+-- Insert new profiles: admin or super_admin only
 CREATE POLICY "Admins can insert profiles"
   ON profiles FOR INSERT WITH CHECK (is_admin());
+
+-- Delete profiles: super_admin only
+CREATE POLICY "Super admins can delete profiles"
+  ON profiles FOR DELETE USING (is_super_admin());
 
 -- ============================================================
 -- GENERAL RLS POLICIES (applied to all data tables)

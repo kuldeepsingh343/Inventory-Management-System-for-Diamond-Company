@@ -232,10 +232,39 @@ export async function processPurchaseReturn(poId: string, returns: any[]) {
       .eq("id", poId);
       
     revalidatePath("/purchases");
+    revalidatePath("/purchases/returns");
     revalidatePath(`/purchases/${poId}`);
     return { data: pr, error: null };
   } catch (error: any) {
     console.error("Process purchase return error:", error);
+    return { data: null, error: error.message };
+  }
+}
+
+export async function getPurchaseReturns() {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("purchase_returns")
+      .select("*, purchase_order:purchase_orders(id, order_no, vendor:contacts(name, company_name))")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      return { data: data as any[], error: null };
+    }
+
+    const { data: orders, error: orderError } = await supabase
+      .from("purchase_orders")
+      .select("*, vendor:contacts(name, company_name)")
+      .in("status", ["returned", "partially_returned"])
+      .order("created_at", { ascending: false });
+
+    if (orderError) throw orderError;
+    return { data: (orders || []) as any[], error: null, fromOrders: true };
+  } catch (error: any) {
+    console.error("Fetch purchase returns error:", error);
     return { data: null, error: error.message };
   }
 }

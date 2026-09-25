@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, User, Shield } from "lucide-react";
+import { LogOut, User, Shield, Crown } from "lucide-react";
 import type { Profile } from "@/lib/types/database";
 
 interface TopbarProps {
@@ -52,6 +52,12 @@ export function Topbar({ profile }: TopbarProps) {
 
       <div className="flex items-center gap-3">
         {/* Role Badge */}
+        {profile?.role === "super_admin" && (
+          <Badge className="gap-1 text-xs font-medium bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-100">
+            <Crown className="w-3 h-3" />
+            Super Admin
+          </Badge>
+        )}
         {profile?.role === "admin" && (
           <Badge variant="secondary" className="gap-1 text-xs font-medium">
             <Shield className="w-3 h-3" />

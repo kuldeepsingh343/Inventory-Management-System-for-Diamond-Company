@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { getContacts, addContact } from "@/lib/actions/contacts";
 import type { Contact, ContactFormData } from "@/lib/types/database";
 import { Input } from "@/components/ui/input";
@@ -19,16 +19,29 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { usePermissions } from "@/lib/hooks/use-permissions";
 import { toast } from "sonner";
 
 export default function ContactsPage() {
+  return (
+    <Suspense fallback={<div className="p-6">Loading contacts...</div>}>
+      <ContactsPageInner />
+    </Suspense>
+  );
+}
+
+function ContactsPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const typeFromUrl = searchParams.get("type");
+  const typeFilter =
+    typeFromUrl === "customer" || typeFromUrl === "vendor" || typeFromUrl === "customer_vendor"
+      ? typeFromUrl
+      : "all";
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -79,7 +92,16 @@ export default function ContactsPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="all" onValueChange={setTypeFilter}>
+      <Tabs
+        value={typeFilter}
+        onValueChange={(value) => {
+          const params = new URLSearchParams(searchParams.toString());
+          if (value === "all") params.delete("type");
+          else params.set("type", value);
+          const qs = params.toString();
+          router.replace(qs ? `/contacts?${qs}` : "/contacts");
+        }}
+      >
         <TabsList>
           <TabsTrigger value="all">All Contacts</TabsTrigger>
           <TabsTrigger value="customer">Customers</TabsTrigger>

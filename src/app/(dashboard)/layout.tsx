@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Sidebar } from "@/components/sidebar";
 import { Topbar } from "@/components/topbar";
@@ -43,11 +43,13 @@ export default function DashboardLayout({
   return (
     <TooltipProvider delay={0}>
       <div className="min-h-screen bg-background">
-        <Sidebar
-          collapsed={collapsed}
-          onToggle={() => setCollapsed(!collapsed)}
-          userRole={profile?.role}
-        />
+        <Suspense fallback={null}>
+          <Sidebar
+            collapsed={collapsed}
+            onToggle={() => setCollapsed(!collapsed)}
+            userRole={profile?.role}
+          />
+        </Suspense>
         <div
           className={cn(
             "min-h-screen transition-all duration-300",

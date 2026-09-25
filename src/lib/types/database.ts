@@ -2,7 +2,7 @@
 // TypeScript types mirroring the Supabase database schema
 // ============================================================
 
-export type UserRole = "admin" | "user";
+export type UserRole = "super_admin" | "admin" | "user";
 export type ContactType = "customer" | "vendor" | "customer_vendor" | "contact";
 export type OrderStatus = "draft" | "active" | "billed" | "partially_returned" | "returned" | "cancelled";
 export type InvoiceStatus = "open" | "paid" | "partially_paid" | "cancelled";

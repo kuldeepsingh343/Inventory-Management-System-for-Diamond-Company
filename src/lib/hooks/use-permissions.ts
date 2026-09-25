@@ -32,7 +32,8 @@ export function usePermissions() {
     fetchProfile();
   }, []);
 
-  const isAdmin = profile?.role === "admin";
+  const isSuperAdmin = profile?.role === "super_admin";
+  const isAdmin = profile?.role === "admin" || profile?.role === "super_admin";
 
   const can = (
     module: keyof UserPermissions,
@@ -46,13 +47,14 @@ export function usePermissions() {
   };
 
   const canDelete = (module: keyof UserPermissions): boolean => {
-    // Only admins can delete — enforced at both UI and RLS level
+    // Only admins (including super_admin) can delete — enforced at both UI and RLS level
     return isAdmin;
   };
 
   return {
     profile,
     loading,
+    isSuperAdmin,
     isAdmin,
     can,
     canDelete,
